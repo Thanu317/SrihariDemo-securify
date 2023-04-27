@@ -1,4 +1,4 @@
-name: Static Analysis Demo
+name: Static Analysis SmartCheck
 on:
   push:
     branches: [master]
@@ -31,8 +31,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install
-     # - run: yarn compile
-
+      
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -40,29 +39,27 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo snap install solc
-          python -m pip install --upgrade pip
-          pip install slither-analyzer==0.8.1 solc-select==0.2.1
+          sudo npm install @smartdec/smartcheck -g
 
       - name: Summary of static ananlysis
         run: |
-          slither . --print human-summary
+          smartcheck -p . --print human-summary
 
       - name: Contract summary of static ananlysis
         run: |
-          slither . --print contract-summary
+          smartcheck -p . --print contract-summary
 
       - name: Function summary
         run: |
-          slither . --print function-summary
+          smartcheck -p . --print function-summary
 
       - name: Inheritance
         run: |
-          slither . --print inheritance
+          smartcheck -p . --print inheritance
 
       - name: Data dependency
         run: |
-          slither . --print data-dependency
+          smartcheck -p . --print data-dependency
           
       - name: Upload report as artifact
         uses: actions/upload-artifact@v2
