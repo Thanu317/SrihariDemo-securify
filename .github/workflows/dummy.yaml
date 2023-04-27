@@ -43,7 +43,7 @@ jobs:
 
       - name: Summary of static ananlysis using smart check
         run: |
-          smartcheck -p .
+          sudo smartcheck -p .
           
       - name: Upload report as artifact
         uses: actions/upload-artifact@v2
