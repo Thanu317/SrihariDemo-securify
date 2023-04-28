@@ -36,7 +36,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn install
       - name: Set environment variables
-      - run: echo "JAVA_TOOL_OPTIONS=-Djavax.xml.accessExternalSchema=all -Djavax.xml.accessExternalDTD=all -Djavax.xml.bind.context.factory=com.sun.xml.bind.v2.ContextFactory" >> $GITHUB_ENV
+        run: echo "JAVA_TOOL_OPTIONS=-Djavax.xml.accessExternalSchema=all -Djavax.xml.accessExternalDTD=all -Djavax.xml.bind.context.factory=com.sun.xml.bind.v2.ContextFactory" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: sudo npm install @smartdec/smartcheck -g
