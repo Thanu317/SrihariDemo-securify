@@ -8,17 +8,13 @@ on:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    container: ethereum/solc:0.5.2
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Securify
-      run: |
-        sudo apt-get update && \
-        sudo apt-get install -y curl && \
-        curl -sL https://github.com/eth-sri/securify/releases/download/v0.4.3/securify-linux -o /usr/local/bin/securify && \
-        chmod +x /usr/local/bin/securify
-
     - name: Run Securify analysis
-      run: securify ./contracts/*.sol
+      run: |
+        docker run -v $PWD:/contracts ethereum/solc:0.5.2 securify /contracts/*.sol > securify_report.json
+
+    - name: Print Securify report
+      run: /bin/bash -c "tail -n +2 securify_report.json"
