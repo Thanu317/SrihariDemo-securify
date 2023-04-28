@@ -14,7 +14,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install Securify
-      uses: ethereum-security-tools/securify@v1.1.1
+      run: |
+        wget https://github.com/eth-sri/securify/releases/download/v0.4.2/securify-linux
+        chmod +x securify-linux
+        sudo mv securify-linux /usr/local/bin/securify
 
     - name: Run Securify
       run: securify --list-vulnerabilities --solc-version 0.8.6 contracts/*.sol
