@@ -22,6 +22,7 @@ jobs:
         git clone https://github.com/eth-sri/securify.git
 
     - name: Build Securify tool
+      working-directory: ./securify
       run: |
         cd securify
         mvn clean package -DskipTests
