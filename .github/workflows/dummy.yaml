@@ -2,7 +2,7 @@ name: Securify Scan
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   securify-scan:
