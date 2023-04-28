@@ -1,26 +1,19 @@
-name: Smart Contract Audit Workflow
+name: Securify Audit
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
 
 jobs:
   audit:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Code
+    - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Install Securify
-      run: |
-        wget https://github.com/eth-sri/securify/releases/latest/download/securify-linux
-        chmod +x securify-linux
-        sudo mv securify-linux /usr/local/bin/securify
-
-    - name: Run Securify
-      run: securify --list-vulnerabilities --solc-version 0.8.6 contracts/*.sol
+    - name: Build Docker image
+      run: docker build -t securify-audit .
+    - name: Run Securify audit
+      run: docker run -v "$(pwd):/contract" securify-audit /contract/dummy.sol
 
     - name: Upload Report to GitHub
       uses: actions/upload-artifact@v2
