@@ -23,8 +23,13 @@ jobs:
 
     - name: Build Securify tool
       run: |
-        cd securify
-        mvn clean package -DskipTests
+        if [ -f securify/pom.xml ]; then
+          cd securify
+          mvn clean package -DskipTests
+        else
+          echo "ERROR: No pom.xml file found in securify directory"
+          exit 1
+        fi
 
     - name: Run Securify analysis
       run: |
@@ -35,4 +40,4 @@ jobs:
 
     - name: Set output
       id: create_securify_dir
-      run: echo "::set-output name=status::$(if [ -d securify ];
+      run: echo "::set-output name=status::$(if [ -d securify ]; then echo 'exists'; else echo 'created'; fi)"
