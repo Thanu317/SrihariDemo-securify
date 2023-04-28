@@ -15,7 +15,7 @@ jobs:
 
     - name: Install Securify
       run: |
-        wget https://github.com/eth-sri/securify/releases/download/v0.4.2/securify-linux
+        wget https://github.com/eth-sri/securify/releases/latest/download/securify-linux
         chmod +x securify-linux
         sudo mv securify-linux /usr/local/bin/securify
 
