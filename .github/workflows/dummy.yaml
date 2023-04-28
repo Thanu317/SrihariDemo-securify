@@ -13,13 +13,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
       
+    - name: Install Python
+      run: sudo apt-get -y install python3 python3-pip python3-distutils
+      
+    - name: Clone Securify repository
+      run: git clone https://github.com/eth-sri/securify.git
+      
+    - name: Install Securify dependencies
+      run: cd securify && pip3 install -r requirements.txt
+      
     - name: Install Securify
-      run: |
-        sudo apt-get update
-        sudo apt-get -y install python3 python3-pip
-        sudo apt-get -y install python3-distutils
-        sudo pip3 install securify
+      run: cd securify && python3 setup.py install
         
     - name: Analyze Solidity contract with Securify
       run: |
-        securify .
+        cd <path_to_contract_directory>
+        securify <contract_name>.sol
