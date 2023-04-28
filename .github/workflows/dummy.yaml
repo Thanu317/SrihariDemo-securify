@@ -1,11 +1,9 @@
 name: Securify
-
 on:
   push:
     branches: [master]
     paths:
       - 'contracts/**/*.sol'
-
 jobs:
   security_scan:
     runs-on: ubuntu-latest
