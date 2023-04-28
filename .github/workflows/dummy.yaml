@@ -28,7 +28,7 @@ jobs:
       - name: Install Java
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          distribution: 'adopt@1.11'
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -40,6 +40,7 @@ jobs:
 
       - name: Summary of static analysis using smart check
         run: sudo smartcheck -p .
+
           
       - name: Upload report as artifact
         uses: actions/upload-artifact@v2
