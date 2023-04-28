@@ -31,6 +31,16 @@ jobs:
           java-version: 8
       - name: Install JAXB API
         run: sudo apt-get install -y libjaxb-api-java
+      - name: Install JAXB API
+        run: |
+              mkdir -p $HOME/.m2
+              echo "<settings></settings>" > $HOME/.m2/settings.xml
+              mvn org.apache.maven.plugins:maven-dependency-plugin:2.10:get \
+                -Dartifact=javax.xml.bind:jaxb-api:2.3.1 \
+                -DrepoUrl=https://repo.maven.apache.org/maven2/ \
+                -Dtransitive=false \
+                -Ddest=$HOME/.m2/repository/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar
+
           
       - name: Set environment variables
         run: echo "JAVA_TOOL_OPTIONS=-Djavax.xml.accessExternalSchema=all -Djavax.xml.accessExternalDTD=all -Djavax.xml.bind.context.factory=com.sun.xml.bind.v2.ContextFactory" >> $GITHUB_ENV
