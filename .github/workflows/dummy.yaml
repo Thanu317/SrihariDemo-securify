@@ -12,20 +12,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Java and Maven
+    - name: Create Securify directory if not exists
       run: |
-        sudo apt-get update
-        sudo apt-get install -y default-jdk maven
+        mkdir -p securify
 
-    - name: Check if Securify directory exists
+    - name: Clone Securify repository
+      if: steps.create_securify_dir.outputs.status == 'success'
       run: |
-        if [ ! -d "securify" ]; then
-          echo "Securify directory not found, cloning repository..."
-          git clone https://github.com/eth-sri/securify.git
-        fi
+        git clone https://github.com/eth-sri/securify.git securify
 
     - name: Build Securify tool
-      working-directory: ./securify
       run: |
         cd securify
         mvn clean package -DskipTests
@@ -36,3 +32,7 @@ jobs:
 
     - name: Print Securify report
       run: /bin/bash -c "tail -n +2 securify_report.json"
+
+    - name: Set output
+      id: create_securify_dir
+      run: echo "::set-output name=status::$(if [ -d securify ];
