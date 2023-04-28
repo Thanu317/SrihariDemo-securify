@@ -7,17 +7,33 @@ on:
     branches: [ master ]
 
 jobs:
-  audit:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+    strategy:
+      matrix:
+        python-version: [3.9]
+        node-version: [16.x]
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup Python environment
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'
+            python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+          sudo snap install solc
+          python -m pip install --upgrade pip
+          pip install slither-analyzer==0.8.1 solc-select==0.2.1
 
     - name: Install Securify
       run: pip install securify
