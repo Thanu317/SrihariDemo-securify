@@ -39,7 +39,7 @@ jobs:
         run: sudo npm install @smartdec/smartcheck -g
 
       - name: Summary of static analysis using smart check
-        run: sudo smartcheck -p .
+        run: sudo smartcheck .
         
       - name: Upload report as artifact
         uses: actions/upload-artifact@v2
