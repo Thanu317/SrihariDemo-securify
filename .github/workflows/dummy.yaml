@@ -1,19 +1,24 @@
-name: Securify Audit
-
+name: Securify Scan
 on:
   push:
-    branches: [master]
+    branches:
+      - main
 
 jobs:
-  audit:
+  securify-scan:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Build Docker image
-      run: docker build -t securify-audit .
-    - name: Run Securify audit
-      run: docker run -v "$(pwd):/contract" securify-audit /contract/dummy.sol
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: false
+        tags: securify
+    - name: Run Securify
+      run: |
+        docker run --rm -v $PWD:/code securify /code
 
     - name: Upload Report to GitHub
       uses: actions/upload-artifact@v2
