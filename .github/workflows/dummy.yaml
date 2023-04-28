@@ -1,61 +1,26 @@
-name: Static Analysis SmartCheck
+name: Smart Contract Audit Workflow
+
 on:
   push:
-    branches: [master]
-    paths:
-      - "contracts/**"
-      - ".github/workflows/dummy.yaml"
-  pull_request:
-    branches: [master]
-    paths:
-      - "contracts/**"
+    branches:
+      - main
 
 jobs:
-  build:
+  audit:
     runs-on: ubuntu-latest
-    permissions:
-      # required for all workflows
-      security-events: write
-      # only required for workflows in private repositories
-      actions: read
-      contents: read
-    strategy:
-      matrix:
-        node-version: [16.x]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: yarn install
-      
-      - name: Install dependencies
-        run: sudo npm install @smartdec/smartcheck -g
+    - name: Checkout Code
+      uses: actions/checkout@v2
 
-      - name: Summary of static ananlysis using smart check
-        run: sudo smartcheck -p .
-          
-      - name: Upload report as artifact
-        uses: actions/upload-artifact@v2
-        with:
-            name: smarctcheck-report
-            path: /home/runner/work/SrihariDemo-smartcheck/SrihariDemo-smartcheck/build/contracts
-            
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
-        with:
-           name: smarctcheck-report
-           path: /home/runner/work/SrihariDemo-smartcheck/SrihariDemo-smartcheck/build/contracts    
-      
-      -  name: Upload SARIF file
-         uses: github/codeql-action/upload-sarif@v2
-         with:
-           sarif_file:  ${{ steps.smarctcheck.outputs.sarif }}
-                  
-      - name: Upload smarctcheck report
-        uses: actions/upload-artifact@v2
-        with:
-         name: smarctcheck report
-         path: report.json
+    - name: Install Securify
+      uses: ethereum-security-tools/securify@v1.1.1
+
+    - name: Run Securify
+      run: securify --list-vulnerabilities --solc-version 0.8.6 contracts/*.sol
+
+    - name: Upload Report to GitHub
+      uses: actions/upload-artifact@v2
+      with:
+        name: securify-report
+        path: report.json
