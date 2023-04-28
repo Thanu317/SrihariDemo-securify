@@ -1,13 +1,54 @@
-name: Securify
-on: push
+name: Static Analysis SmartCheck
+on:
+  push:
+    branches: [master]
+    paths:
+      - "contracts/**"
+      - ".github/workflows/dummy.yaml"
+  pull_request:
+    branches: [master]
+    paths:
+      - "contracts/**"
 
 jobs:
-  securify:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+    strategy:
+      matrix:
+        node-version: [16.x]
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Build Docker image
         run: docker build -t securify .
       - name: Run Securify analysis
-        run: docker run /code securify securify /code
+        run: docker run -v /code securify securify /code
+        
+      - name: Upload report as artifact
+        uses: actions/upload-artifact@v2
+        with:
+            name: smarctcheck-report
+            path: /home/runner/work/SrihariDemo-smartcheck/SrihariDemo-smartcheck/build/contracts
+            
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+           name: smarctcheck-report
+           path: /home/runner/work/SrihariDemo-smartcheck/SrihariDemo-smartcheck/build/contracts    
+      
+      -  name: Upload SARIF file
+         uses: github/codeql-action/upload-sarif@v2
+         with:
+           sarif_file:  ${{ steps.smarctcheck.outputs.sarif }}
+                  
+      - name: Upload smarctcheck report
+        uses: actions/upload-artifact@v2
+        with:
+         name: smarctcheck report
+         path: report.json
