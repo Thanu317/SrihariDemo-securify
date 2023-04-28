@@ -1,54 +1,26 @@
-name: Static Analysis SmartCheck
+name: Securify Audit
+
 on:
   push:
-    branches: [master]
-    paths:
-      - "contracts/**"
-      - ".github/workflows/dummy.yaml"
+    branches: [ master ]
   pull_request:
-    branches: [master]
-    paths:
-      - "contracts/**"
+    branches: [ master ]
 
 jobs:
-  build:
+  audit:
     runs-on: ubuntu-latest
-    permissions:
-      # required for all workflows
-      security-events: write
-      # only required for workflows in private repositories
-      actions: read
-      contents: read
-    strategy:
-      matrix:
-        node-version: [16.x]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Build Docker image
-        run: docker build -t securify .
-      - name: Run Securify analysis
-        run: docker run -v /code securify securify /code
-        
-      - name: Upload report as artifact
-        uses: actions/upload-artifact@v2
-        with:
-            name: smarctcheck-report
-            path: /home/runner/work/SrihariDemo-smartcheck/SrihariDemo-smartcheck/build/contracts
-            
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
-        with:
-           name: smarctcheck-report
-           path: /home/runner/work/SrihariDemo-smartcheck/SrihariDemo-smartcheck/build/contracts    
-      
-      -  name: Upload SARIF file
-         uses: github/codeql-action/upload-sarif@v2
-         with:
-           sarif_file:  ${{ steps.smarctcheck.outputs.sarif }}
-                  
-      - name: Upload smarctcheck report
-        uses: actions/upload-artifact@v2
-        with:
-         name: smarctcheck report
-         path: report.json
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install Securify
+      run: pip install securify
+
+    - name: Run Securify audit
+      run: securify -i contracts/ -o reports/
