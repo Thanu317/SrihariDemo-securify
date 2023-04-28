@@ -1,35 +1,13 @@
-name: Static Analysis SmartCheck
-on:
-  push:
-    branches: [master]
-    paths:
-      - "contracts/**"
-      - ".github/workflows/dummy.yaml"
-  pull_request:
-    branches: [master]
-    paths:
-      - "contracts/**"
+name: Securify
+on: push
 
 jobs:
-  build:
+  securify:
     runs-on: ubuntu-latest
-    permissions:
-      # required for all workflows
-      security-events: write
-      # only required for workflows in private repositories
-      actions: read
-      contents: read
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Install Securify
-        run: |
-          git clone https://github.com/eth-sri/securify2.git
-          cd securify2
-          npm install
-      - name: Run Securify
-        run: |
-          python3 securify.py -d ${{ github.workspace }}/contracts -o ${{ github.workspace }}/report.json
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build Docker image
+        run: docker build -t securify .
+      - name: Run Securify analysis
+        run: docker run /code securify securify /code
