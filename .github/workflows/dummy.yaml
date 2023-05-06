@@ -27,5 +27,4 @@ jobs:
 
     - name: Compile contract
       run: |
-        solc --version
         cd contracts && securify dummy.sol | grep "potential vulnerability"
