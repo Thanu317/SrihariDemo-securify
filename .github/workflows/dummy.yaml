@@ -26,7 +26,7 @@ jobs:
       run: cd securify2 && python3 setup.py install --user
 
     - name: Install solc
-      uses: ethereum/solc-setup@v1
+      uses: dipsix/solc-install@v1
       with:
         solc-version: '0.8.7' # Replace with desired version
     - name: Compile contract
