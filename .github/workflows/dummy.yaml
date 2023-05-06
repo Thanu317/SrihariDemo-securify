@@ -30,7 +30,7 @@ jobs:
           sudo add-apt-repository ppa:ethereum/ethereum
           sudo apt-get update
           sudo apt-get install solc
-          env:
+    - env:
            SOLC_VERSION: 0.8.19
               
     - name: Analyze Solidity contract with Securify
