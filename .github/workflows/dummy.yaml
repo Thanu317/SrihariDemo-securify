@@ -29,7 +29,7 @@ jobs:
       run: |
           sudo snap install solc
           python -m pip install --upgrade pip
-          pip install slither-analyzer==0.8.19 solc-select==0.2.1
+          pip install slither-analyzer==0.8.1 solc-select==0.2.1
               
     - name: Analyze Solidity contract with Securify
       run:  cd contracts && securify dummy.sol | grep "potential vulnerability"
