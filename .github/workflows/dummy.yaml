@@ -27,5 +27,5 @@ jobs:
         
     - name: Analyze Solidity contract with Securify
       run: |
-        cd <path_to_contract_directory>
-        securify <contract_name>.sol
+        cd contracts
+        securify dummy.sol
