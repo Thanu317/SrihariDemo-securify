@@ -25,10 +25,6 @@ jobs:
     - name: Install Securify dependencies
       run: cd securify2 && python3 setup.py install --user
 
-    - name: Install solc
-      uses: dipsix/solc-install@v1
-      with:
-        solc-version: '0.8.7' # Replace with desired version
     - name: Compile contract
       run: |
         solc --version
