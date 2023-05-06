@@ -24,6 +24,9 @@ jobs:
       
     - name: Install Securify dependencies
       run: cd securify2 && python3 setup.py install --user
+      
+    - name: install graphviz
+      run: sudo apt install graphviz
 
     - name: Compile contract
       run: cd contracts && securify dummy.sol | grep "potential vulnerability"
