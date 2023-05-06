@@ -27,9 +27,11 @@ jobs:
       
     - name: Install dependencies
       run: |
-          sudo snap install solc
-          python -m pip install --upgrade pip
-          pip install slither-analyzer==0.8.1 solc-select==0.2.1
+          sudo add-apt-repository ppa:ethereum/ethereum
+          sudo apt-get update
+          sudo apt-get install solc
+          env:
+           SOLC_VERSION: 0.8.19
               
     - name: Analyze Solidity contract with Securify
       run:  cd contracts && securify dummy.sol | grep "potential vulnerability"
