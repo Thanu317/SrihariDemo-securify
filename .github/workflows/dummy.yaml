@@ -26,6 +26,4 @@ jobs:
       run: cd securify2 && python3 setup.py install --user
               
     - name: Analyze Solidity contract with Securify
-      run: |
-        cd contracts
-        securify dummy.sol --output output.json
+      run:  cd securify2 && cd contracts && securify contract.sol | grep "potential vulnerability"
