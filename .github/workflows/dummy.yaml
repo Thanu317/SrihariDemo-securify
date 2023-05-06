@@ -28,4 +28,4 @@ jobs:
     - name: Analyze Solidity contract with Securify
       run: |
         cd contracts
-        securify analyze dummy.sol
+        securify dummy.sol --output output.json
