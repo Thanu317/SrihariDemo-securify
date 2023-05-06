@@ -21,10 +21,7 @@ jobs:
       
     - name: Install Securify dependencies
       run: cd securify && pip3 install -r requirements.txt
-      
-    - name: Install Securify
-      run: cd securify && python3 setup.py install
-        
+              
     - name: Analyze Solidity contract with Securify
       run: |
         cd contracts
