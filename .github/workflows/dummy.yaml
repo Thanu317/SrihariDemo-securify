@@ -1,35 +1,19 @@
-name: Securify Audit
+name: Solidity Security Analysis
 
-on:
-  push:
-    branches:
-      - master
+on: push
 
 jobs:
-  securify-analysis:
+  analyze:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Install Python
-      run: sudo apt-get -y install python3 python3-pip python3-distutils
-      
-    - name: Clone Securify repository
-      run: git clone https://github.com/eth-sri/securify2.git
-      
-    - name: Install Securify dependencies
-      run: cd securify2 && pip3 install -r requirements.txt
-      
-    - name: Install Securify dependencies
-      run: cd securify2 && python3 setup.py install --user
-      
-    - name: Install dependencies
-      run: |
-          sudo snap install solc
-          python -m pip install --upgrade pip
-          pip install slither-analyzer==0.8.1 solc-select==0.2.1
-              
-    - name: Analyze Solidity contract with Securify
-      run:  cd contracts && securify dummy.sol | grep "potential vulnerability"
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Python & Securify
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - run: pip install securify
+
+      - name: Analyze Contract
+        run: securify contracts/dummy.sol
