@@ -22,6 +22,12 @@ jobs:
     - name: Install Securify dependencies
       run: cd securify2 && pip3 install -r requirements.txt
       
+    - name: Install Solec
+      run: |
+            sudo add-apt-repository ppa:ethereum/ethereum
+            sudo apt-get update
+            sudo apt-get install solc
+      
     - name: Install Securify dependencies
       run: cd securify2 && python3 setup.py install --user
 
