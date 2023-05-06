@@ -20,7 +20,7 @@ jobs:
       run: git clone https://github.com/eth-sri/securify2.git
       
     - name: Install Securify dependencies
-      run: cd securify && pip3 install -r requirements.txt
+      run: cd securify2 && pip3 install -r requirements.txt
       
     - name: Install Securify dependencies
       run: python3 setup.py install
