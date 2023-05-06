@@ -33,4 +33,4 @@ jobs:
 
     - name: Compile contract
       run: |
-        cd contracts && securify dummy.sol | grep "potential vulnerability"
+        cd contracts && securify dummy.sol
