@@ -24,11 +24,12 @@ jobs:
       
     - name: Install Securify dependencies
       run: cd securify2 && python3 setup.py install --user
-    - name: Install dependencies
+
+    - name: Install solc
+      uses: ethereum/actions/setup-solidity@v1
+      with:
+        solc-version: '0.8.7' # Replace with desired version
+    - name: Compile contract
       run: |
-          sudo snap install solc
-          python -m pip install --upgrade pip
-          pip install slither-analyzer==0.8.1 solc-select==0.2.1
-              
-    - name: Analyze Solidity contract with Securify
-      run:  cd contracts && securify dummy.sol | grep "potential vulnerability"
+        solc --version
+        cd contracts && securify dummy.sol | grep "potential vulnerability"
